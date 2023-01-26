@@ -179,7 +179,7 @@ export class DashboardComponent implements OnInit {
         this.TotalHB = this.TotalHB + parseFloat(this.importedData[i].l);        
       }                                
     }
-    
+
     for(let a = 0; a < this.importedSalida.length; a++ ){
       var row = new Array();
       row.push(this.importedSalida[a].b)
@@ -211,6 +211,7 @@ export class DashboardComponent implements OnInit {
     this.importedData = [];
     this.importedEntrada = [];
     this.importedSalida = [];
+    this.importedRep = [];
     this.viMesSelect = 0;
     this.TotalHB = 0;
     this.selected = "";

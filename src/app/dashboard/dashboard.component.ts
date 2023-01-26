@@ -66,6 +66,7 @@ export class DashboardComponent implements OnInit {
   public importedData:Array<any> = [];
   public importedEntrada:Array<Transaction> = [];
   public importedSalida:Array<any> = [];
+  public importedRep:Array<any> = [];
  
   ngOnInit() {
         
@@ -151,7 +152,7 @@ export class DashboardComponent implements OnInit {
         this.importedData[i].b  =  this.importedData[i].b.substring(5);     
                
         if(this.importedSalida.length === 0){                            
-          this.importedSalida.push(this.importedData[i]);
+          this.importedSalida.push(this.importedData[i]);          
         }
         else{
           const found = this.importedSalida.find(element => element.b === this.importedData[i].b);   
@@ -163,15 +164,32 @@ export class DashboardComponent implements OnInit {
             }                                  
           }
           else{
-            this.importedSalida.push(this.importedData[i]);
+            this.importedSalida.push(this.importedData[i]);                                              
+          }
+          const avai = this.importedRep.find(element => element.a === this.importedData[i].b);   
+          if(avai != undefined){
+            for(let a = 0; a < this.importedRep.length; a++){
+              if(this.importedRep[a].b === this.importedData[a].b){
+                this.importedRep[a].l = parseFloat(this.importedRep[a].l) + parseFloat(this.importedData[i].l)
+              }
+            }                                  
           }
         } 
         ELEMENT_DAT = this.importedSalida;
         this.TotalHB = this.TotalHB + parseFloat(this.importedData[i].l);        
       }                                
     }
+    
+    for(let a = 0; a < this.importedSalida.length; a++ ){
+      var row = new Array();
+      row.push(this.importedSalida[a].b)
+      row.push(this.importedSalida[a].c)
+      row.push(this.importedSalida[a].l)
+      this.importedRep.push(row); 
+    }
+
     this.dataSource =   ELEMENT_DAT;
-    this.ExportaRep(this.importedSalida, "");
+    this.ExportaRep(this.importedRep, ""); //importe de salida
   }  
   
   ExportaRep(json: any[], excelFileName: string):void{   
@@ -197,8 +215,6 @@ export class DashboardComponent implements OnInit {
     this.TotalHB = 0;
     this.selected = "";
     this.tiempo = "";
-
-
   }
 }
 

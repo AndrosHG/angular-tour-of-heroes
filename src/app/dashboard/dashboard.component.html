@@ -1,0 +1,71 @@
+<mat-toolbar color="warn">
+    <mat-toolbar-row class="example-spacer">
+        <span>PROCESO Y CONTROL </span>
+    </mat-toolbar-row>
+</mat-toolbar>
+<p></p>
+<mat-card class="example-card">
+
+    <mat-card-header>
+        <input #fileUpload [accept]="'.csv'" type="file" class="file-sube" (change)="importDataFromCSVByType($event)">
+    </mat-card-header>
+</mat-card>
+<p></p>
+<mat-card class="example-card">
+    <h3 style="color:rgb(255, 254, 254);background-color:rgb(212, 90, 19)">{{nota}}</h3>
+    <mat-form-field appearance="fill">
+        <mat-label>Quincena</mat-label>
+        <mat-select>
+            <mat-option value="one">PRIMERA</mat-option>
+            <mat-option value="two">SEGUNDA</mat-option>
+        </mat-select>
+
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Mes</mat-label>
+        <mat-select [(value)]="selected" (selectionChange)="selectMes(selected)">
+            <mat-option *ngFor="let Mes of meses" [value]="Mes.nombre">{{Mes.nombre}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-label>Año: </mat-label>
+    <input type="number" matInput>
+    <p></p>
+    <mat-label>Periodo: </mat-label>
+    <input type="text" readonly class="tvreadonly" [value]="tiempo">
+    <button mat-raised-button color="primary" class="btn-Procesa" (click)="probando()">Procesar</button>
+    <button mat-raised-button class="btn-Limpiar" (click)="LimpiarPantalla()">Limpiar</button>
+
+
+</mat-card>
+<p></p>
+<mat-card class="example-card">
+    <table mat-table [dataSource]="dataSource">
+        <!-- Position Column -->
+        <ng-container matColumnDef="demo-position">
+            <th mat-header-cell *matHeaderCellDef> Distribuidora </th>
+            <td mat-cell *matCellDef="let element"> {{element.b}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="demo-name">
+            <th mat-header-cell *matHeaderCellDef> Planta </th>
+            <td mat-cell *matCellDef="let element"> {{element.c}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="demo-weight">
+            <th mat-header-cell *matHeaderCellDef> Importe </th>
+            <td mat-cell *matCellDef="let element"> $ {{element.l | number: '1.2-2'}} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <h3 style="color:rgb(255, 254, 254);background-color:rgb(212, 90, 19); ">IMPORTE $: {{TotalHB| number: '1.2-2'}} </h3>
+
+
+</mat-card>
+<p></p>
+
+<button mat-raised-button color="warn" class="btn-Salir">Reporte Trimestral</button>

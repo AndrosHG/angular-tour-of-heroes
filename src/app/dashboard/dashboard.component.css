@@ -1,0 +1,108 @@
+mat-grid-tile {
+    background: lightgrey;
+}
+
+.mat-stepper-vertical {
+    margin-top: 8px;
+}
+
+.mat-mdc-form-field {
+    margin-top: 16px;
+}
+
+.example-spacer {
+    flex: 2 2 auto;
+    font-style: italic;
+    font-size: x-large;
+}
+
+.example-card {
+    max-width: auto;
+}
+
+.demo-table {
+    width: 100%;
+    background: grey;
+}
+
+.mat-column-demo-position {
+    width: 32px;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-demo-name {
+    padding-left: 16px;
+    font-size: 20px;
+}
+
+.mat-column-demo-weight {
+    font-style: italic;
+}
+
+.mat-column-demo-symbol {
+    width: 32px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.filesube {
+    border-color: blue;
+}
+
+.example-container mat-form-field+mat-form-field {
+    margin-right: 75px;
+}
+
+mat-form-field {
+    margin-right: 75px;
+}
+
+.tvreadonly {
+    width: 40%;
+}
+
+.btn-Procesa {
+    margin-left: 25%;
+}
+
+.btn-Limpiar {
+    margin-left: 10%;
+}
+
+.btn-Salir {
+    margin-left: 83%;
+}
+
+.demo-table {
+    width: 100%;
+}
+
+.mat-column-demo-position {
+    width: 10%;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+}
+
+.mat-column-demo-name {
+    width: 60%;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+}
+
+.mat-column-demo-weight {
+    width: 30%;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+}

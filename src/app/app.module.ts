@@ -16,6 +16,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
+import { BuzonComponent } from './buzon/buzon.component';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 
@@ -26,6 +28,7 @@ import {MatButtonModule} from '@angular/material/button';
     LogginComponent,
     HeroesComponent,
     DashboardComponent,
+    BuzonComponent
     
     
     
@@ -46,6 +49,7 @@ import {MatButtonModule} from '@angular/material/button';
     MatTableModule,
     MatSelectModule,
     MatButtonModule,
+    MatDividerModule
     
     
     

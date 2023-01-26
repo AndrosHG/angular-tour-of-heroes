@@ -1,11 +1,20 @@
-{{buzon}}
+<p></p>
+<mat-divider></mat-divider>
+<p>
+    <mat-form-field appearance="fill">
+        <mat-label>Fill form field</mat-label>
+        <input matInput placeholder="Placeholder">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-hint>Hint</mat-hint>
+    </mat-form-field>
 
-<h3>Top Heroes</h3>
-<div class="grid grid-pad">
-    <a *ngFor="let hero of heroes" class="col-1-4">
-        <div class="module hero">
-            <h4>{{hero.name}}</h4>
-        </div>
-    </a>
-</div>
-<button mat-raised-button color="warn" class="btn-Salir">Reporte Trimestral</button>
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Outline form field</mat-label>
+            <input matInput placeholder="Placeholder">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            <mat-hint>Hint</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <mat-divider></mat-divider>

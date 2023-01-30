@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import { BuzonComponent } from './buzon/buzon.component';
 import {MatDividerModule} from '@angular/material/divider';
+import { MatExpansionPanel} from '@angular/material/expansion';
 
 
 
@@ -37,6 +38,7 @@ import {MatDividerModule} from '@angular/material/divider';
 
  
   imports: [
+    
     BrowserModule,
     FormsModule,
     AppRoutingModule,
@@ -49,7 +51,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatTableModule,
     MatSelectModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    
     
     
     

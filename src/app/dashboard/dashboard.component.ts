@@ -58,7 +58,9 @@ export class DashboardComponent implements OnInit {
   viMesSelect = 0;
   TotalHB = 0;
   name    = "Holdback.xlsx";
-    
+  vcAnio = "";
+  vcQna = "";
+
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-weight'];
   dataSource = ELEMENT_DATA;
 
@@ -114,39 +116,48 @@ export class DashboardComponent implements OnInit {
     }
 
     for(let j =0;  j < this.meses.length; j++){
-      if(this.periodo[j].mes1 == vcMes){
-        this.viMesSelect = this.periodo[j].id;
-      }      
-
-    }
+        if(this.meses[j].nombre === vcMes){
+          this.viMesSelect = this.meses[j].id;
+        }      
+    }       
   }
 
   public async importDataFromCSV(event: any) {
-    let fileContent = await this.getTextFromFile(event);
+   
+    let fileContent = await this.getTextFromFile(event);       
     this.importedData = this._csvService.importDataFromCSV(fileContent);
   }
   
   public async importDataFromCSVByType(event: any) {
-    let fileContent = "";
-    fileContent = await this.getTextFromFile(event);
-    this.importedData = this._csvService.importDataFromCSVByType(
-      fileContent,
-      new Transaction()
-    );
+    let fileContent = "";      
+    console.log("importDAta--->", event);
+
+        fileContent = await this.getTextFromFile(event);
+        this.importedData = this._csvService.importDataFromCSVByType(
+        fileContent,
+        new Transaction()
+      );
+
   }
 
   private async getTextFromFile(event:any){
+    console.log(event.target.files[0]);
+           
     const file: File = event.target.files[0];
     let fileContent = await file.text();
-
+    
+    
     return fileContent;
   }
 
   probando(){       
     this.dataSource = [];
     let  ELEMENT_DAT: any = {};   
+    console.log( this.vcAnio);
     
-    
+
+
+
     for (let i = 0; i < this.importedData.length; i++) {   
       if(this.importedData[i].a !== null){ 
         this.importedData[i].b  =  this.importedData[i].b.substring(5);     
@@ -180,22 +191,49 @@ export class DashboardComponent implements OnInit {
       }                                
     }
 
+    var row = new Array();
+    row.push("Asociacion Mexicana de Distribuidores General Motors, A.C.");
+    this.importedRep.push(row);
+
+    var row = new Array();
+    row.push("Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio );
+    this.importedRep.push(row);
+
+    var row = new Array();
+    row.push(" ");
+    this.importedRep.push(row);
+
+    var row = new Array();
+    row.push("PLANTA")
+    row.push("DISTRIBUIDORA")
+    row.push("IMPORTE $")
+    this.importedRep.push(row); 
+
+    
+
     for(let a = 0; a < this.importedSalida.length; a++ ){
-      var row = new Array();
-      row.push(this.importedSalida[a].b)
-      row.push(this.importedSalida[a].c)
-      row.push(this.importedSalida[a].l)
-      this.importedRep.push(row); 
+        var row = new Array();
+        row.push(this.importedSalida[a].b)
+        row.push(this.importedSalida[a].c)
+        row.push(this.importedSalida[a].l)
+        this.importedRep.push(row); 
     }
 
+
+    var row = new Array();
+    row.push("")
+    row.push("TOTAL:")
+    row.push(this.TotalHB)
+    this.importedRep.push(row); 
+
     this.dataSource =   ELEMENT_DAT;
-    this.ExportaRep(this.importedRep, ""); //importe de salida
+    //this.ExportaRep(this.importedRep, ""); //importe de salida
   }  
   
   ExportaRep(json: any[], excelFileName: string):void{   
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    const workbook: XLSX.WorkBook = { Sheets: { 'homologacion': worksheet }, 
-    SheetNames: ['homologacion'] };
+    const workbook: XLSX.WorkBook = { Sheets: { 'Holdback': worksheet }, 
+    SheetNames: ['Holdback'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array'});
     this.saveAsExcelFile(excelBuffer, excelFileName);
 
@@ -203,7 +241,7 @@ export class DashboardComponent implements OnInit {
 
   private saveAsExcelFile(buffer: any, fileName: string): void {
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
-        FileSaver.saveAs(data, fileName + 'HB_' + new Date().getTime() + EXCEL_EXTENSION);
+        FileSaver.saveAs(data, fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + EXCEL_EXTENSION);
   }
 
   LimpiarPantalla(){

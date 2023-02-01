@@ -15,9 +15,9 @@
     <h3 style="color:rgb(255, 254, 254);background-color:rgb(212, 90, 19)">{{nota}}</h3>
     <mat-form-field appearance="fill">
         <mat-label>Quincena</mat-label>
-        <mat-select>
-            <mat-option value="one">PRIMERA</mat-option>
-            <mat-option value="two">SEGUNDA</mat-option>
+        <mat-select [(ngModel)]='vcQna'>
+            <mat-option value="1ra">PRIMERA</mat-option>
+            <mat-option value="2da">SEGUNDA</mat-option>
         </mat-select>
 
     </mat-form-field>
@@ -28,7 +28,7 @@
         </mat-select>
     </mat-form-field>
     <mat-label>Año: </mat-label>
-    <input type="number" matInput>
+    <input [(ngModel)]='vcAnio' type="number" matInput>
     <p></p>
     <mat-label>Periodo: </mat-label>
     <input type="text" readonly class="tvreadonly" [value]="tiempo">
@@ -68,4 +68,11 @@
 </mat-card>
 <p></p>
 
-<button mat-raised-button color="warn" class="btn-Salir">Reporte Trimestral</button>
+<button #fileUpload mat-raised-button color="warn" class="btn-Salir" type="'.csv'" class="file-sube" (change)="importDataFromCSVByType($event)">Reporte Trimestral</button>
+<!--
+<mat-card class="example-card">
+
+    <mat-card-header>
+        <input #fileUpload color="warn" class="btn-Salir" [accept]="'.csv'" type="file" (change)="importDataFromCSVByType($event)">
+    </mat-card-header>
+</mat-card>-->

@@ -19,6 +19,8 @@ import {MatButtonModule} from '@angular/material/button';
 import { BuzonComponent } from './buzon/buzon.component';
 import {MatDividerModule} from '@angular/material/divider';
 import { MatExpansionPanel} from '@angular/material/expansion';
+import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
+import { DistribuidoraServicesService } from '../servicios/distribuidoraService/distribuidora-services.service';
 
 
 
@@ -29,11 +31,7 @@ import { MatExpansionPanel} from '@angular/material/expansion';
     LogginComponent,
     HeroesComponent,
     DashboardComponent,
-    BuzonComponent
-    
-    
-    
-    
+    BuzonComponent                
   ],
 
  
@@ -51,16 +49,13 @@ import { MatExpansionPanel} from '@angular/material/expansion';
     MatTableModule,
     MatSelectModule,
     MatButtonModule,
-    MatDividerModule,
-    
-    
-    
-    
-         
+    MatDividerModule         
   ],
   
   providers: [
     // no need to place any providers due to the `providedIn` flag...
+    LogginserviceService,
+    DistribuidoraServicesService
   ],
   bootstrap: [ AppComponent ],
   

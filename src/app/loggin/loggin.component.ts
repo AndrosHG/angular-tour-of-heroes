@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service'
+import { HttpClientModule } from "@angular/common/http";
 
-export interface Tile {
-  color: string;
-  cols: number;
-  rows: number;
-  text: string;
-}
+
 
 @Component({
   selector: 'app-loggin',
@@ -16,19 +13,19 @@ export interface Tile {
 
 
 
-export class LogginComponent implements OnInit {
-  loggin = "Bienvenido";
-  mensaje = "";
-
-  tiles: Tile[] = [
-    {text: 'One', cols: 3, rows: 1, color: 'lightblue'},
-    {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},
-    {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
-  ];
+export class LogginComponent  {
   
-  constructor( ) { }
+  email!: string;
+  password!: string;
 
-  ngOnInit() {
+ 
+  
+  constructor(private _serviceLog: LogginserviceService ) { }
+
+  
+
+  login() {
+    this._serviceLog.LoadUser(this.email,this.password );
   }
 
 }

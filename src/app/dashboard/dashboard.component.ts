@@ -5,6 +5,9 @@ import { Injectable } from '@angular/core';
 import * as FileSaver   from 'file-saver';
 import * as XLSX from 'xlsx';
 
+import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
+import { DistribuidoraServicesService } from '../../servicios/distribuidoraService/distribuidora-services.service';
+
 export interface Tile {
     color: string;
     cols: number;
@@ -40,18 +43,20 @@ export interface Tile {
     selector: 'app-grid',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css'],
-    providers: [CsvService]
+    providers: [CsvService,DistribuidoraServicesService]
   })
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
+    
  })
 
 export class DashboardComponent implements OnInit {
-  constructor(private _csvService: CsvService) {}
+  constructor(private _csvService: CsvService,
+              private _DistService: DistribuidoraServicesService) {}
   
-  prueba = "Bienvenido";
-  texto  = "Archivo:  ";  
+  
+   
   nota   = "Campos Obligatorios";
   selected = "";
   tiempo   = "";
@@ -71,7 +76,7 @@ export class DashboardComponent implements OnInit {
   public importedRep:Array<any> = [];
  
   ngOnInit() {
-        
+    this._DistService.GetDist();        
   }
 
   meses:  Meses[]=[

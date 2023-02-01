@@ -21,8 +21,13 @@ import {MatDividerModule} from '@angular/material/divider';
 import { MatExpansionPanel} from '@angular/material/expansion';
 import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
 import { DistribuidoraServicesService } from '../servicios/distribuidoraService/distribuidora-services.service';
+import { OKTA_CONFIG, OktaAuthModule } from '@okta/okta-angular';
 
-
+const oktaConfig = {
+  issuer: 'https://{yourOktaDomain}/oauth2/default',
+  clientId: '{clientId}',
+  redirectUri: window.location.origin + '/callback'
+};
 
 
 @NgModule({
@@ -49,13 +54,16 @@ import { DistribuidoraServicesService } from '../servicios/distribuidoraService/
     MatTableModule,
     MatSelectModule,
     MatButtonModule,
-    MatDividerModule         
+    MatDividerModule,
+    
+             
   ],
   
   providers: [
     // no need to place any providers due to the `providedIn` flag...
     LogginserviceService,
-    DistribuidoraServicesService
+    DistribuidoraServicesService,
+    {provide: OKTA_CONFIG, useValue: oktaConfig }
   ],
   bootstrap: [ AppComponent ],
   

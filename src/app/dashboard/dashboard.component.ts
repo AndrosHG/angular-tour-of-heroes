@@ -53,7 +53,8 @@ export interface Tile {
 
 export class DashboardComponent implements OnInit {
   constructor(private _csvService: CsvService,
-              private _DistService: DistribuidoraServicesService) {}
+              private _DistService: DistribuidoraServicesService,
+              ) { }
   
   
    

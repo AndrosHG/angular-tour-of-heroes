@@ -14,3 +14,5 @@ export class LogginserviceService {
 
   }
 }
+
+/*https://www.npmjs.com/package/ts-sql-query*/

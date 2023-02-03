@@ -22,6 +22,8 @@ import { MatExpansionPanel} from '@angular/material/expansion';
 import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
 import { DistribuidoraServicesService } from '../servicios/distribuidoraService/distribuidora-services.service';
 import { OKTA_CONFIG, OktaAuthModule } from '@okta/okta-angular';
+import { DialogoConfirmacionComponent } from './dialogo-confirmacion/dialogo-confirmacion.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const oktaConfig = {
   issuer: 'https://{yourOktaDomain}/oauth2/default',
@@ -36,7 +38,8 @@ const oktaConfig = {
     LogginComponent,
     HeroesComponent,
     DashboardComponent,
-    BuzonComponent                
+    BuzonComponent,
+    DialogoConfirmacionComponent                
   ],
 
  
@@ -55,6 +58,7 @@ const oktaConfig = {
     MatSelectModule,
     MatButtonModule,
     MatDividerModule,
+    MatDialogModule,
     
              
   ],
@@ -64,8 +68,13 @@ const oktaConfig = {
     LogginserviceService,
     DistribuidoraServicesService,
     {provide: OKTA_CONFIG, useValue: oktaConfig }
+    
+
   ],
   bootstrap: [ AppComponent ],
+  entryComponents: [
+    DialogoConfirmacionComponent// <--- Aquí
+  ]
   
 })
 export class AppModule { }

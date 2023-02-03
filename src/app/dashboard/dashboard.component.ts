@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Inject} from '@angular/core';
 import { CsvService } from 'src/servicios/csv.service';  
 import { Transaction } from '../clases/ttEntrada.model';
 import { Injectable } from '@angular/core';
@@ -7,6 +7,13 @@ import * as XLSX from 'xlsx';
 
 import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
 import { DistribuidoraServicesService } from '../../servicios/distribuidoraService/distribuidora-services.service';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+
+
+interface Dist{
+  dist: string;
+  planta:string;
+}
 
 export interface Tile {
     color: string;
@@ -38,6 +45,9 @@ export interface Tile {
   const ELEMENT_DATA: PeriodicElement[] = [];
   const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
   const EXCEL_EXTENSION = '.xlsx';
+
+
+ 
   
   @Component({
     selector: 'app-grid',
@@ -46,17 +56,24 @@ export interface Tile {
     providers: [CsvService,DistribuidoraServicesService]
   })
 
+
+
   @Injectable({
     providedIn: 'root',
     
  })
 
+
+
+ 
 export class DashboardComponent implements OnInit {
   constructor(private _csvService: CsvService,
-              private _DistService: DistribuidoraServicesService,
-              ) { }
+              private _DistService: DistribuidoraServicesService,    
+              public dialog: MatDialog) 
+              { }
   
-  
+                      
+              
    
   nota   = "Campos Obligatorios";
   selected = "";
@@ -66,6 +83,7 @@ export class DashboardComponent implements OnInit {
   name    = "Holdback.xlsx";
   vcAnio = "";
   vcQna = "";
+  //mensaje = "¿Quitar datos de pantalla?"
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-weight'];
   dataSource = ELEMENT_DATA;
@@ -75,6 +93,7 @@ export class DashboardComponent implements OnInit {
   public importedEntrada:Array<Transaction> = [];
   public importedSalida:Array<any> = [];
   public importedRep:Array<any> = [];
+  public ReporteTrimestral:Array<any> = [];
  
   ngOnInit() {
     this._DistService.GetDist();        
@@ -102,6 +121,14 @@ export class DashboardComponent implements OnInit {
     {periodo:'CUARTO  TRIMESTRE', mes1:'AGOSTO',    mes2: 'SEPTIEMBRE', mes3: 'OCTUBRE', id: 4},
   ]
 
+  dist: Dist[]=[
+    {planta:'101', dist:'AEROPLAZA'},
+    {planta:'164', dist:'FR AUTOMOTRIZ'},
+    {planta:'180', dist:'GRUPO ISMO'},
+    {planta:'207', dist:'CUAUTLA'},
+    {planta:'243', dist:'CALIDA SANJERA'}
+
+  ]
   public saveDataInCSV(name: string, data: Array<any>): void {
     let csvContent = this._csvService.saveDataInCSV(data);
 
@@ -136,14 +163,33 @@ export class DashboardComponent implements OnInit {
   
   public async importDataFromCSVByType(event: any) {
     let fileContent = "";      
-    console.log("importDAta--->", event);
-
         fileContent = await this.getTextFromFile(event);
         this.importedData = this._csvService.importDataFromCSVByType(
         fileContent,
         new Transaction()
       );
 
+  }
+
+  LimpiarResultadpos(){
+    
+
+  }
+  
+  public async importDataFromCSVByTypeRep(event: any) {
+    let fileContent = "";      
+        fileContent = await this.getTextFromFile(event);
+        this.ReporteTrimestral = this._csvService.importDataFromCSVByType(
+        fileContent,
+        new Transaction()
+      );
+
+  }
+  Reporte(){
+    for (let z= 0; z < this.ReporteTrimestral.length; z++){
+      console.log(this.ReporteTrimestral[z]);
+      
+    }
   }
 
   private async getTextFromFile(event:any){
@@ -162,20 +208,31 @@ export class DashboardComponent implements OnInit {
     console.log( this.vcAnio);
     
 
-
+    let vcPlanta = "";
 
     for (let i = 0; i < this.importedData.length; i++) {   
+      
+      
+      
+
       if(this.importedData[i].a !== null){ 
-        this.importedData[i].b  =  this.importedData[i].b.substring(5);     
-               
-        if(this.importedSalida.length === 0){                            
+        this.importedData[i].b  =  this.importedData[i].b.substring(5);  
+        const avaiDist = this.dist.find(cPlanta => cPlanta.planta === this.importedData[i].b );
+        this.importedData[i].c = avaiDist?.dist;
+        
+        
+
+        if(this.importedSalida.length === 0){                      
           this.importedSalida.push(this.importedData[i]);          
         }
         else{
+          
+
           const found = this.importedSalida.find(element => element.b === this.importedData[i].b);   
           if(found != undefined){
             for(let j = 0; j < this.importedSalida.length; j++){
               if(this.importedSalida[j].b === this.importedData[i].b){
+                /*this.importedSalida[j].c = */
                 this.importedSalida[j].l = parseFloat(this.importedSalida[j].l) + parseFloat(this.importedData[i].l)
               }
             }                                  
@@ -261,5 +318,24 @@ export class DashboardComponent implements OnInit {
     this.selected = "";
     this.tiempo = "";
   }
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(DialogAnimationsExampleDialog, {
+      
+    });
+  }    
+
+
+
 }
 
+
+
+@Component({
+  selector: 'dialog-animations-example-dialog',
+  templateUrl: './dialog-animations-example-dialog.html',
+})
+
+export class DialogAnimationsExampleDialog {
+  constructor(public dialogRef: MatDialogRef<DialogAnimationsExampleDialog>) {}
+}

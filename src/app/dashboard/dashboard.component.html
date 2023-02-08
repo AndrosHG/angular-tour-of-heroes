@@ -1,5 +1,5 @@
 <mat-toolbar color="warn">
-    <mat-toolbar-row class="example-spacer">
+    <mat-toolbar-row class="example-space">
         <span>PROCESO Y CONTROL </span>
     </mat-toolbar-row>
 </mat-toolbar>
@@ -68,14 +68,14 @@
 </mat-card>
 <p></p>
 
-
 <mat-card class="example-card">
 
     <mat-card-header>
-        <input #fileUpload color="warn" [accept]="'.csv'" type="file" (change)="importDataFromCSVByTypeRep($event)">
+        <input #fileUpload color="warn" [accept]="'.csv'" type="file" (change)="importDataFromCSVByType($event)">
     </mat-card-header>
 </mat-card>
 
+<!--
 <mat-card class="example-card">
 
     <mat-card-header>
@@ -84,3 +84,5 @@
 </mat-card>
 <button mat-raised-button (click)="openDialog('0ms', '0ms')">Open dialog without animation</button>
 <button mat-raised-button (click)="openDialog('3000ms', '1500ms')">Open dialog slowly</button>
+
+-->

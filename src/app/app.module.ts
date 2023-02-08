@@ -23,7 +23,7 @@ import { LogginserviceService } from 'src/servicios/logginServices/logginservice
 import { DistribuidoraServicesService } from '../servicios/distribuidoraService/distribuidora-services.service';
 import { OKTA_CONFIG, OktaAuthModule } from '@okta/okta-angular';
 import { DialogoConfirmacionComponent } from './dialogo-confirmacion/dialogo-confirmacion.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 const oktaConfig = {
   issuer: 'https://{yourOktaDomain}/oauth2/default',
@@ -67,7 +67,8 @@ const oktaConfig = {
     // no need to place any providers due to the `providedIn` flag...
     LogginserviceService,
     DistribuidoraServicesService,
-    {provide: OKTA_CONFIG, useValue: oktaConfig }
+    {provide: OKTA_CONFIG, useValue: oktaConfig },
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {panelClass: 'mat-dialog-override'}}
     
 
   ],

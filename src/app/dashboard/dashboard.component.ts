@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject} from '@angular/core';
+import { Component, OnInit, Inject, CUSTOM_ELEMENTS_SCHEMA, ElementRef} from '@angular/core';
 import { CsvService } from 'src/servicios/csv.service';  
 import { Transaction } from '../clases/ttEntrada.model';
 import { Injectable } from '@angular/core';
@@ -7,7 +7,8 @@ import * as XLSX from 'xlsx';
 
 import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
 import { DistribuidoraServicesService } from '../../servicios/distribuidoraService/distribuidora-services.service';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog, } from '@angular/material/dialog';
+import { ViewChild } from '@angular/core';
 
 
 interface Dist{
@@ -45,7 +46,8 @@ export interface Tile {
   const ELEMENT_DATA: PeriodicElement[] = [];
   const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
   const EXCEL_EXTENSION = '.xlsx';
-
+  
+ 
 
  
   
@@ -56,7 +58,7 @@ export interface Tile {
     providers: [CsvService,DistribuidoraServicesService]
   })
 
-
+  
 
   @Injectable({
     providedIn: 'root',
@@ -64,7 +66,7 @@ export interface Tile {
  })
 
 
-
+  
  
 export class DashboardComponent implements OnInit {
   constructor(private _csvService: CsvService,
@@ -72,8 +74,9 @@ export class DashboardComponent implements OnInit {
               public dialog: MatDialog) 
               { }
   
-                      
-              
+            
+                            
+                                 
    
   nota   = "Campos Obligatorios";
   selected = "";
@@ -138,6 +141,8 @@ export class DashboardComponent implements OnInit {
     hiddenElement.download = name + '.csv';
     hiddenElement.click();
   }
+
+  
    
   selectMes(vcMes: String){     
     for (let i = 0; i < this.periodo.length; i++) {
@@ -155,13 +160,12 @@ export class DashboardComponent implements OnInit {
     }       
   }
 
-  public async importDataFromCSV(event: any) {
-   
+  /*public async importDataFromCSV(event: any) {
     let fileContent = await this.getTextFromFile(event);       
     this.importedData = this._csvService.importDataFromCSV(fileContent);
-  }
+  }*/
   
-  public async importDataFromCSVByType(event: any) {
+  public async importDataFromCSVByType(event: any) {    
     let fileContent = "";      
         fileContent = await this.getTextFromFile(event);
         this.importedData = this._csvService.importDataFromCSVByType(
@@ -170,69 +174,40 @@ export class DashboardComponent implements OnInit {
       );
 
   }
-
-  LimpiarResultadpos(){
-    
-
-  }
-  
-  public async importDataFromCSVByTypeRep(event: any) {
-    let fileContent = "";      
-        fileContent = await this.getTextFromFile(event);
-        this.ReporteTrimestral = this._csvService.importDataFromCSVByType(
-        fileContent,
-        new Transaction()
-      );
-
-  }
-  Reporte(){
-    for (let z= 0; z < this.ReporteTrimestral.length; z++){
-      console.log(this.ReporteTrimestral[z]);
-      
-    }
-  }
-
-  private async getTextFromFile(event:any){
-    console.log(event.target.files[0]);
-           
+  private async getTextFromFile(event:any){           
+    console.log(event.target.files[0]);    
     const file: File = event.target.files[0];
-    let fileContent = await file.text();
-    
-    
+    let fileContent = await file.text();   
     return fileContent;
   }
 
-  probando(){       
+  probando(){         
     this.dataSource = [];
-    let  ELEMENT_DAT: any = {};   
-    console.log( this.vcAnio);
-    
+    this.importedSalida = [];
+    this.importedRep = [];
+    this.importedEntrada = [];
+    this.TotalHB    = 0;
+    let  ELEMENT_DAT: any = [];   
+       
 
-    let vcPlanta = "";
-
-    for (let i = 0; i < this.importedData.length; i++) {   
-      
-      
-      
-
+    for (let i = 0; i < this.importedData.length; i++) {      
       if(this.importedData[i].a !== null){ 
         this.importedData[i].b  =  this.importedData[i].b.substring(5);  
+
+        console.log("dist-->", this.importedData[i].b);
+        
+
         const avaiDist = this.dist.find(cPlanta => cPlanta.planta === this.importedData[i].b );
         this.importedData[i].c = avaiDist?.dist;
         
-        
-
-        if(this.importedSalida.length === 0){                      
+        if(this.importedSalida.length === 0){        
           this.importedSalida.push(this.importedData[i]);          
         }
         else{
-          
-
           const found = this.importedSalida.find(element => element.b === this.importedData[i].b);   
           if(found != undefined){
             for(let j = 0; j < this.importedSalida.length; j++){
               if(this.importedSalida[j].b === this.importedData[i].b){
-                /*this.importedSalida[j].c = */
                 this.importedSalida[j].l = parseFloat(this.importedSalida[j].l) + parseFloat(this.importedData[i].l)
               }
             }                                  
@@ -302,9 +277,15 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  
+
   private saveAsExcelFile(buffer: any, fileName: string): void {
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
         FileSaver.saveAs(data, fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + EXCEL_EXTENSION);
+
+
+    /*var blob = new Blob(["This is my first text."], {type: "text/plain;charset=utf-8"});
+    FileSaver.saveAs(blob, "testfile1.txt");*/
   }
 
   LimpiarPantalla(){
@@ -321,21 +302,18 @@ export class DashboardComponent implements OnInit {
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(DialogAnimationsExampleDialog, {
-      
+      width: '250px',
+      /*enterAnimationDuration,
+      exitAnimationDuration,*/
     });
-  }    
+  }
 
+  
 
-
-}
-
-
-
-@Component({
+}@Component({
   selector: 'dialog-animations-example-dialog',
-  templateUrl: './dialog-animations-example-dialog.html',
+  templateUrl: 'dialog-animations-example-dialog.html',
 })
-
 export class DialogAnimationsExampleDialog {
   constructor(public dialogRef: MatDialogRef<DialogAnimationsExampleDialog>) {}
 }

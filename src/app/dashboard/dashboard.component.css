@@ -110,3 +110,5 @@ mat-form-field {
     border-right: 1px solid currentColor;
     padding-right: 24px;
 }
+
+.mat-typography {}

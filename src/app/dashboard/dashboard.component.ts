@@ -166,6 +166,7 @@ export class DashboardComponent implements OnInit {
   }*/
   
   public async importDataFromCSVByType(event: any) {    
+    this.LimpiarPantalla();
     let fileContent = "";      
         fileContent = await this.getTextFromFile(event);
         this.importedData = this._csvService.importDataFromCSVByType(
@@ -265,10 +266,11 @@ export class DashboardComponent implements OnInit {
     this.importedRep.push(row); 
 
     this.dataSource =   ELEMENT_DAT;
-    //this.ExportaRep(this.importedRep, ""); //importe de salida
+    this.ExportaRep(this.importedRep, ""); //importe de salida
   }  
   
-  ExportaRep(json: any[], excelFileName: string):void{   
+  ExportaRep(json: any[], excelFileName: string):void{ 
+   
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     const workbook: XLSX.WorkBook = { Sheets: { 'Holdback': worksheet }, 
     SheetNames: ['Holdback'] };
@@ -280,12 +282,17 @@ export class DashboardComponent implements OnInit {
   
 
   private saveAsExcelFile(buffer: any, fileName: string): void {
-    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
-        FileSaver.saveAs(data, fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + EXCEL_EXTENSION);
+    let data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    FileSaver.saveAs(data, fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + EXCEL_EXTENSION);
 
+    let vcCadena = "";
 
-    /*var blob = new Blob(["This is my first text."], {type: "text/plain;charset=utf-8"});
-    FileSaver.saveAs(blob, "testfile1.txt");*/
+    for(let a = 0; a < this.importedSalida.length; a++ ){
+      vcCadena = vcCadena  + this.importedSalida[a].b + " " + this.importedSalida[a].c + " " + this.importedSalida[a].l + "\n";
+    }
+            
+    let blob = new Blob([vcCadena], {type: "text/plain;charset=utf-8"});
+    FileSaver.saveAs(blob,  fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + ".txt");
   }
 
   LimpiarPantalla(){

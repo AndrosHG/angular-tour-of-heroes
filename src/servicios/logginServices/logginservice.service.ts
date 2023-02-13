@@ -13,7 +13,7 @@ export class LogginserviceService {
 
 
   LoadUser(vcUsuario: string, vcPassw: string): Observable<any>{
-    console.log("servicio");
+    
     let params = new HttpParams();
 
     params = params.append('ipcContrato', "1362023000176");

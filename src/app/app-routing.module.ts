@@ -9,7 +9,7 @@ import { BuzonComponent } from './buzon/buzon.component';
 
 
 const routes: Routes = [
-  { path: '',       component:DashboardComponent},
+  { path: '',       component:LogginComponent},
   { path: 'heroes', component:HeroesComponent},
   { path: 'holdb',  component:DashboardComponent},
   { path: 'loggin', component:LogginComponent},

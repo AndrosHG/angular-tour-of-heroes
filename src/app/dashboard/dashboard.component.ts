@@ -160,10 +160,10 @@ export class DashboardComponent implements OnInit {
     }       
   }
 
-  /*public async importDataFromCSV(event: any) {
+  public async importDataFromCSV(event: any) {
     let fileContent = await this.getTextFromFile(event);       
     this.importedData = this._csvService.importDataFromCSV(fileContent);
-  }*/
+  }
   
   public async importDataFromCSVByType(event: any) {    
     this.LimpiarPantalla();
@@ -281,6 +281,7 @@ export class DashboardComponent implements OnInit {
 
   
 
+  
   private saveAsExcelFile(buffer: any, fileName: string): void {
     let data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
     FileSaver.saveAs(data, fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + EXCEL_EXTENSION);
@@ -307,20 +308,21 @@ export class DashboardComponent implements OnInit {
     this.tiempo = "";
   }
 
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    this.dialog.open(DialogAnimationsExampleDialog, {
-      width: '250px',
-      /*enterAnimationDuration,
-      exitAnimationDuration,*/
-    });
+    openDialog() {
+      const dialogRef = this.dialog.open(DialogContentExampleDialog);
+      
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+        
+      });
+    }
   }
 
-  
 
-}@Component({
-  selector: 'dialog-animations-example-dialog',
+@Component({
+  selector: 'dialog-content-example-dialog',
   templateUrl: 'dialog-animations-example-dialog.html',
 })
-export class DialogAnimationsExampleDialog {
-  constructor(public dialogRef: MatDialogRef<DialogAnimationsExampleDialog>) {}
-}
+export class DialogContentExampleDialog {}
+ 

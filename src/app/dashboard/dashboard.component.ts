@@ -223,11 +223,17 @@ export class DashboardComponent implements OnInit {
     
     for (let i = 0; i < this.ReporteFinal.length; i++) {
       if (this.ReporteFinal[i].a != null) {
-          const avaiDist = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 2);
-          console.log("avaiDist-->", avaiDist?.a + " " + avaiDist?.c + " " + avaiDist?.d);
 
-          const avaiDists = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 1);
-          console.log("avaiDist-->", avaiDists?.a + " " + avaiDists?.c + " " + avaiDists?.d);
+        const avaiDist1 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 1);
+        console.log("avaiDist-->", avaiDist1?.a + " " + avaiDist1?.c + " " + avaiDist1?.d);
+
+        const avaiDist2 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 2);
+        console.log("avaiDist-->", avaiDist2?.a + " " + avaiDist2?.c + " " + avaiDist2?.d);
+          
+        const avaiDist3 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 3);
+        console.log("avaiDist-->", avaiDist3?.a + " " + avaiDist3?.c + " " + avaiDist3?.d);
+
+          
                    
           /*this.importedData[i].c = avaiDist?.a;*/
       }

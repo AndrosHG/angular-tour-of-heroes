@@ -60,7 +60,8 @@ const oktaConfig = {
     MatButtonModule,
     MatDividerModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    
     
     
              

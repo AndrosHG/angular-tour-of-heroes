@@ -71,7 +71,7 @@
 <mat-card class="example-card">
 
     <mat-card-header>
-        <input #fileUpload multiple color="warn" [accept]="'.txt'" type="file">
+        <input #fileUpload multiple color="warn" [accept]="'.csv'" type="file" (change)="importDataFromCSVByTypeR($event)">
     </mat-card-header>
 </mat-card>
 
@@ -79,6 +79,7 @@
 <mat-card class="example-card">
 
     <mat-card-header>
+
+        <button mat-raised-button class="btn-Limpiar" (click)="CreaReporteFin()">Reporte Trimestral</button>
     </mat-card-header>
 </mat-card>
-<button mat-button (click)="openDialog()">Open dialog</button>

@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject, CUSTOM_ELEMENTS_SCHEMA, ElementRef} from '@angular/core';
-import { CsvService } from 'src/servicios/csv.service';  
+import { Component, OnInit, Inject, CUSTOM_ELEMENTS_SCHEMA, ElementRef } from '@angular/core';
+import { CsvService } from 'src/servicios/csv.service';
 import { Transaction } from '../clases/ttEntrada.model';
 import { Injectable } from '@angular/core';
-import * as FileSaver   from 'file-saver';
+import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 
 import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
@@ -11,79 +11,74 @@ import { MatDialogRef, MatDialog, } from '@angular/material/dialog';
 import { ViewChild } from '@angular/core';
 
 
-interface Dist{
+interface Dist {
   dist: string;
-  planta:string;
+  planta: string;
 }
 
 export interface Tile {
-    color: string;
-    cols: number;
-    rows: number;
-    text: string;    
-  }
+  color: string;
+  cols: number;
+  rows: number;
+  text: string;
+}
 
-  export interface PeriodicElement {
-    name: string;
-    position: number;
-    weight: number;
-    symbol: string;
-  }
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
 
-  interface Meses{
-    nombre: string;
-    id:number; 
-  }
+interface Meses {
+  nombre: string;
+  id: number;
+}
 
-  interface Periodo{
-    periodo: string;
-    mes1: string;
-    mes2: string;
-    mes3: string;
-    id: number;
-  }
-  
-  const ELEMENT_DATA: PeriodicElement[] = [];
-  const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  const EXCEL_EXTENSION = '.xlsx';
-  
- 
+interface Periodo {
+  periodo: string;
+  mes1: string;
+  mes2: string;
+  mes3: string;
+  id: number;
+}
 
- 
-  
-  @Component({
-    selector: 'app-grid',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.css'],
-    providers: [CsvService,DistribuidoraServicesService]
-  })
-
-  
-
-  @Injectable({
-    providedIn: 'root',
-    
- })
+const ELEMENT_DATA: PeriodicElement[] = [];
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 
 
-  
- 
+
+
+
+@Component({
+  selector: 'app-grid',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css'],
+  providers: [CsvService, DistribuidoraServicesService]
+})
+
+
+
+@Injectable({
+  providedIn: 'root',
+
+})
+
+
+
+
 export class DashboardComponent implements OnInit {
   constructor(private _csvService: CsvService,
-              private _DistService: DistribuidoraServicesService,    
-              public dialog: MatDialog) 
-              { }
-  
-            
-                            
-                                 
-   
-  nota   = "Campos Obligatorios";
+    private _DistService: DistribuidoraServicesService,
+    public dialog: MatDialog) { }
+
+  nota = "Campos Obligatorios";
   selected = "";
-  tiempo   = "";
+  tiempo = "";
   viMesSelect = 0;
   TotalHB = 0;
-  name    = "Holdback.xlsx";
+  name = "Holdback.xlsx";
   vcAnio = "";
   vcQna = "";
   //mensaje = "¿Quitar datos de pantalla?"
@@ -91,143 +86,209 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-weight'];
   dataSource = ELEMENT_DATA;
 
-  public ArraySalida:any  = [];
-  public importedData:Array<any> = [];
-  public importedEntrada:Array<Transaction> = [];
-  public importedSalida:Array<any> = [];
-  public importedRep:Array<any> = [];
-  public ReporteTrimestral:Array<any> = [];
- 
+  public ArraySalida: any = [];
+  public importedData: Array<any> = [];
+  public importedEntrada: Array<Transaction> = [];
+  public importedSalida: Array<any> = [];
+  public importedRep: Array<any> = [];
+
+  public ReporteMes: Array<any> = [];
+  public ReporteTrimestral: Array<any> = [];
+  public ReporteFinal: Array<any> = [];
+
   ngOnInit() {
-    this._DistService.GetDist();        
+    this._DistService.GetDist();
   }
 
-  meses:  Meses[]=[
-    {nombre: 'ENERO', id: 1},
-    {nombre: 'FEBRERO', id: 2},
-    {nombre: 'MARZO', id: 3},
-    {nombre: 'ABRIL', id: 4},
-    {nombre: 'MAYO', id: 5},
-    {nombre: 'JUNIO', id: 6},
-    {nombre: 'JULIO', id: 7},
-    {nombre: 'AGOSTO', id: 8},
-    {nombre: 'SEPTIEMBRE', id: 9},
-    {nombre: 'OCTUBRE', id: 10},
-    {nombre: 'NOVIEMBRE', id: 11},
-    {nombre: 'DICIEMBRE', id: 12},
+  meses: Meses[] = [
+    { nombre: 'ENERO', id: 1 },
+    { nombre: 'FEBRERO', id: 2 },
+    { nombre: 'MARZO', id: 3 },
+    { nombre: 'ABRIL', id: 4 },
+    { nombre: 'MAYO', id: 5 },
+    { nombre: 'JUNIO', id: 6 },
+    { nombre: 'JULIO', id: 7 },
+    { nombre: 'AGOSTO', id: 8 },
+    { nombre: 'SEPTIEMBRE', id: 9 },
+    { nombre: 'OCTUBRE', id: 10 },
+    { nombre: 'NOVIEMBRE', id: 11 },
+    { nombre: 'DICIEMBRE', id: 12 },
   ];
 
-  periodo: Periodo[]=[
-    {periodo:'PRIMER  TRIMESTRE', mes1:'NOVIMEBRE', mes2: 'DICIEMBRE',  mes3: 'ENERO',   id: 1},
-    {periodo:'SEGUNDO TRIMESTRE', mes1:'FEBRERO',   mes2: 'MARZO',      mes3: 'ABRIL',   id: 2},
-    {periodo:'TERCER  TRIMESTRE', mes1:'MAYO',      mes2: 'JUNIO',      mes3: 'JULIO',   id: 3},
-    {periodo:'CUARTO  TRIMESTRE', mes1:'AGOSTO',    mes2: 'SEPTIEMBRE', mes3: 'OCTUBRE', id: 4},
+  periodo: Periodo[] = [
+    { periodo: 'PRIMER  TRIMESTRE', mes1: 'NOVIMEBRE', mes2: 'DICIEMBRE', mes3: 'ENERO', id: 1 },
+    { periodo: 'SEGUNDO TRIMESTRE', mes1: 'FEBRERO', mes2: 'MARZO', mes3: 'ABRIL', id: 2 },
+    { periodo: 'TERCER  TRIMESTRE', mes1: 'MAYO', mes2: 'JUNIO', mes3: 'JULIO', id: 3 },
+    { periodo: 'CUARTO  TRIMESTRE', mes1: 'AGOSTO', mes2: 'SEPTIEMBRE', mes3: 'OCTUBRE', id: 4 },
   ]
 
-  dist: Dist[]=[
-    {planta:'101', dist:'AEROPLAZA'},
-    {planta:'164', dist:'FR AUTOMOTRIZ'},
-    {planta:'180', dist:'GRUPO ISMO'},
-    {planta:'207', dist:'CUAUTLA'},
-    {planta:'243', dist:'CALIDA SANJERA'}
+  dist: Dist[] = [
+    { planta: '101', dist: 'AEROPLAZA' },
+    { planta: '164', dist: 'FR AUTOMOTRIZ' },
+    { planta: '180', dist: 'GRUPO ISMO' },
+    { planta: '207', dist: 'CUAUTLA' },
+    { planta: '243', dist: 'CALIDA SANJERA' }
 
   ]
   public saveDataInCSV(name: string, data: Array<any>): void {
     let csvContent = this._csvService.saveDataInCSV(data);
 
     var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' ;
+    hiddenElement.href = 'data:text/csv;charset=utf-8,';
     hiddenElement.target = '_blank';
     hiddenElement.download = name + '.csv';
     hiddenElement.click();
   }
 
-  
-   
-  selectMes(vcMes: String){     
+
+
+  selectMes(vcMes: String) {
     for (let i = 0; i < this.periodo.length; i++) {
-      if(this.periodo[i].mes1 == vcMes || 
+      if (this.periodo[i].mes1 == vcMes ||
         this.periodo[i].mes2 == vcMes ||
-        this.periodo[i].mes3 == vcMes ){
+        this.periodo[i].mes3 == vcMes) {
         this.tiempo = this.periodo[i].periodo;
       }
     }
 
-    for(let j =0;  j < this.meses.length; j++){
-        if(this.meses[j].nombre === vcMes){
-          this.viMesSelect = this.meses[j].id;
-        }      
-    }       
+    for (let j = 0; j < this.meses.length; j++) {
+      if (this.meses[j].nombre === vcMes) {
+        this.viMesSelect = this.meses[j].id;
+      }
+    }
   }
 
   public async importDataFromCSV(event: any) {
-    let fileContent = await this.getTextFromFile(event);       
+    let fileContent = await this.getTextFromFile(event);
     this.importedData = this._csvService.importDataFromCSV(fileContent);
   }
-  
-  public async importDataFromCSVByType(event: any) {    
+
+  public async importDataFromCSVByType(event: any) {
     this.LimpiarPantalla();
-    let fileContent = "";      
-        fileContent = await this.getTextFromFile(event);
-        this.importedData = this._csvService.importDataFromCSVByType(
-        fileContent,
-        new Transaction()
-      );
+    let fileContent = "";
+    fileContent = await this.getTextFromFile(event);
+    this.importedData = this._csvService.importDataFromCSVByType(
+      fileContent,
+      new Transaction()
+    );
 
   }
-  private async getTextFromFile(event:any){           
-    console.log(event.target.files[0]);    
+
+  /*Reporte Trimestral*/
+  public async importDataFromCSVByTypeR(event: any) {
+    let fileContent = "";
+    let viFile = 0;
+    fileContent = await this.getTextFromFile(event);
+    this.ReporteMes = this._csvService.importDataFromCSVByType(
+      fileContent,
+      new Transaction()
+    );
+
+    if (this.ReporteTrimestral.length === 0) {
+      viFile = 1;
+    } else {
+      viFile = 2;
+      const found = this.ReporteTrimestral.find(element => element.d === viFile);
+      if (found == undefined) {
+        viFile = 2;
+      } else {
+        viFile = 3;
+      }
+    }
+
+    for (let a = 0; a < this.ReporteMes.length; a++) {
+      this.ReporteMes[a].d = viFile;
+      this.ReporteTrimestral.push(this.ReporteMes[a]);
+      
+    }
+  }
+  /*------------------*/
+
+  CreaReporteFin() {
+    for (let i = 0; i < this.ReporteTrimestral.length; i++) {
+      if (this.ReporteTrimestral[i].a != null) {
+
+        if (this.ReporteFinal.length === 0) {
+          this.ReporteFinal.push(this.ReporteTrimestral[i]);
+        } else {
+          const found = this.ReporteFinal.find(element => element.a === this.ReporteTrimestral[i].a);
+          if (found == undefined) {
+            this.ReporteFinal.push(this.ReporteTrimestral[i]);
+          }
+        }
+      }
+    }
+    
+    
+    
+    for (let i = 0; i < this.ReporteFinal.length; i++) {
+      if (this.ReporteFinal[i].a != null) {
+          const avaiDist = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 2);
+          console.log("avaiDist-->", avaiDist?.a + " " + avaiDist?.c + " " + avaiDist?.d);
+
+          const avaiDists = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 1);
+          console.log("avaiDist-->", avaiDists?.a + " " + avaiDists?.c + " " + avaiDists?.d);
+                   
+          /*this.importedData[i].c = avaiDist?.a;*/
+      }
+    }
+
+    /*
+      
+    */
+    //this.ExportaRep(this.ReporteFinal, "");         
+  }
+
+  private async getTextFromFile(event: any) {
+    console.log(event.target.files[0]);
     const file: File = event.target.files[0];
-    let fileContent = await file.text();   
+    let fileContent = await file.text();
     return fileContent;
   }
 
-  probando(){         
+  probando() {
     this.dataSource = [];
     this.importedSalida = [];
     this.importedRep = [];
     this.importedEntrada = [];
-    this.TotalHB    = 0;
-    let  ELEMENT_DAT: any = [];   
-       
+    this.TotalHB = 0;
+    let ELEMENT_DAT: any = [];
 
-    for (let i = 0; i < this.importedData.length; i++) {      
-      if(this.importedData[i].a !== null){ 
-        this.importedData[i].b  =  this.importedData[i].b.substring(5);  
 
-        console.log("dist-->", this.importedData[i].b);
-        
+    for (let i = 0; i < this.importedData.length; i++) {
+      if (this.importedData[i].a !== null) {
+        this.importedData[i].b = this.importedData[i].b.substring(5);
 
-        const avaiDist = this.dist.find(cPlanta => cPlanta.planta === this.importedData[i].b );
+        const avaiDist = this.dist.find(cPlanta => cPlanta.planta === this.importedData[i].b);
         this.importedData[i].c = avaiDist?.dist;
-        
-        if(this.importedSalida.length === 0){        
-          this.importedSalida.push(this.importedData[i]);          
+
+        if (this.importedSalida.length === 0) {
+          this.importedSalida.push(this.importedData[i]);
         }
-        else{
-          const found = this.importedSalida.find(element => element.b === this.importedData[i].b);   
-          if(found != undefined){
-            for(let j = 0; j < this.importedSalida.length; j++){
-              if(this.importedSalida[j].b === this.importedData[i].b){
+        else {
+          const found = this.importedSalida.find(element => element.b === this.importedData[i].b);
+          if (found != undefined) {
+            for (let j = 0; j < this.importedSalida.length; j++) {
+              if (this.importedSalida[j].b === this.importedData[i].b) {
                 this.importedSalida[j].l = parseFloat(this.importedSalida[j].l) + parseFloat(this.importedData[i].l)
               }
-            }                                  
+            }
           }
-          else{
-            this.importedSalida.push(this.importedData[i]);                                              
+          else {
+            this.importedSalida.push(this.importedData[i]);
           }
-          const avai = this.importedRep.find(element => element.a === this.importedData[i].b);   
-          if(avai != undefined){
-            for(let a = 0; a < this.importedRep.length; a++){
-              if(this.importedRep[a].b === this.importedData[a].b){
+          const avai = this.importedRep.find(element => element.a === this.importedData[i].b);
+          if (avai != undefined) {
+            for (let a = 0; a < this.importedRep.length; a++) {
+              if (this.importedRep[a].b === this.importedData[a].b) {
                 this.importedRep[a].l = parseFloat(this.importedRep[a].l) + parseFloat(this.importedData[i].l)
               }
-            }                                  
+            }
           }
-        } 
+        }
         ELEMENT_DAT = this.importedSalida;
-        this.TotalHB = this.TotalHB + parseFloat(this.importedData[i].l);        
-      }                                
+        this.TotalHB = this.TotalHB + parseFloat(this.importedData[i].l);
+      }
     }
 
     var row = new Array();
@@ -235,7 +296,7 @@ export class DashboardComponent implements OnInit {
     this.importedRep.push(row);
 
     var row = new Array();
-    row.push("Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio );
+    row.push("Holdback_" + this.vcQna + "_" + this.viMesSelect + "_" + this.vcAnio);
     this.importedRep.push(row);
 
     var row = new Array();
@@ -246,16 +307,16 @@ export class DashboardComponent implements OnInit {
     row.push("PLANTA")
     row.push("DISTRIBUIDORA")
     row.push("IMPORTE $")
-    this.importedRep.push(row); 
+    this.importedRep.push(row);
 
-    
 
-    for(let a = 0; a < this.importedSalida.length; a++ ){
-        var row = new Array();
-        row.push(this.importedSalida[a].b)
-        row.push(this.importedSalida[a].c)
-        row.push(this.importedSalida[a].l)
-        this.importedRep.push(row); 
+
+    for (let a = 0; a < this.importedSalida.length; a++) {
+      var row = new Array();
+      row.push(this.importedSalida[a].b)
+      row.push(this.importedSalida[a].c)
+      row.push(this.importedSalida[a].l)
+      this.importedRep.push(row);
     }
 
 
@@ -263,40 +324,38 @@ export class DashboardComponent implements OnInit {
     row.push("")
     row.push("TOTAL:")
     row.push(this.TotalHB)
-    this.importedRep.push(row); 
+    this.importedRep.push(row);
 
-    this.dataSource =   ELEMENT_DAT;
+    this.dataSource = ELEMENT_DAT;
     this.ExportaRep(this.importedRep, ""); //importe de salida
-  }  
-  
-  ExportaRep(json: any[], excelFileName: string):void{ 
-   
+  }
+
+  ExportaRep(json: any[], excelFileName: string): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-    const workbook: XLSX.WorkBook = { Sheets: { 'Holdback': worksheet }, 
-    SheetNames: ['Holdback'] };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array'});
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Holdback': worksheet },
+      SheetNames: ['Holdback']
+    };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, excelFileName);
 
   }
 
-  
-
-  
   private saveAsExcelFile(buffer: any, fileName: string): void {
     let data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
-    FileSaver.saveAs(data, fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + EXCEL_EXTENSION);
+    FileSaver.saveAs(data, fileName + "Holdback_" + this.vcQna + "_" + this.viMesSelect + "_" + this.vcAnio + EXCEL_EXTENSION);
 
     let vcCadena = "";
 
-    for(let a = 0; a < this.importedSalida.length; a++ ){
-      vcCadena = vcCadena  + this.importedSalida[a].b + " " + this.importedSalida[a].c + " " + this.importedSalida[a].l + "\n";
+    /*for (let a = 0; a < this.importedSalida.length; a++) {
+      vcCadena = vcCadena + this.importedSalida[a].b + "," + this.importedSalida[a].c + "," + this.importedSalida[a].l + "\n";
     }
-            
-    let blob = new Blob([vcCadena], {type: "text/plain;charset=utf-8"});
-    FileSaver.saveAs(blob,  fileName + "Holdback_" + this.vcQna + "_" +  this.viMesSelect + "_" + this.vcAnio + ".txt");
+
+    let blob = new Blob([vcCadena], { type: "csv/plain;charset=utf-8" });
+    FileSaver.saveAs(blob, fileName + "Holdback_" + this.vcQna + "_" + this.viMesSelect + "_" + this.vcAnio + ".csv");*/
   }
 
-  LimpiarPantalla(){
+  LimpiarPantalla() {
     this.dataSource = [];
     this.importedData = [];
     this.importedEntrada = [];
@@ -307,22 +366,6 @@ export class DashboardComponent implements OnInit {
     this.selected = "";
     this.tiempo = "";
   }
-
-    openDialog() {
-      const dialogRef = this.dialog.open(DialogContentExampleDialog);
-      
-  
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
-        
-      });
-    }
-  }
+}
 
 
-@Component({
-  selector: 'dialog-content-example-dialog',
-  templateUrl: 'dialog-animations-example-dialog.html',
-})
-export class DialogContentExampleDialog {}
- 

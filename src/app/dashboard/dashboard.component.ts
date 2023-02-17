@@ -48,9 +48,6 @@ const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.
 const EXCEL_EXTENSION = '.xlsx';
 
 
-
-
-
 @Component({
   selector: 'app-grid',
   templateUrl: './dashboard.component.html',
@@ -65,9 +62,6 @@ const EXCEL_EXTENSION = '.xlsx';
 
 })
 
-
-
-
 export class DashboardComponent implements OnInit {
   constructor(private _csvService: CsvService,
     private _DistService: DistribuidoraServicesService,
@@ -81,7 +75,9 @@ export class DashboardComponent implements OnInit {
   name = "Holdback.xlsx";
   vcAnio = "";
   vcQna = "";
-  //mensaje = "¿Quitar datos de pantalla?"
+  vcArchivo1 = "";
+  vcArchivo2 = "";
+  vcArchivo3 = "";
 
   displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-weight'];
   dataSource = ELEMENT_DATA;
@@ -186,13 +182,16 @@ export class DashboardComponent implements OnInit {
 
     if (this.ReporteTrimestral.length === 0) {
       viFile = 1;
+      this.vcArchivo1 = event.target.files[0].name;
     } else {
       viFile = 2;
       const found = this.ReporteTrimestral.find(element => element.d === viFile);
       if (found == undefined) {
         viFile = 2;
+        this.vcArchivo2 = event.target.files[0].name;
       } else {
         viFile = 3;
+        this.vcArchivo3 = event.target.files[0].name;
       }
     }
 
@@ -205,6 +204,10 @@ export class DashboardComponent implements OnInit {
   /*------------------*/
 
   CreaReporteFin() {
+    if(this.ReporteTrimestral.length===0){
+      return;
+    }
+
     for (let i = 0; i < this.ReporteTrimestral.length; i++) {
       if (this.ReporteTrimestral[i].a != null) {
 
@@ -219,34 +222,46 @@ export class DashboardComponent implements OnInit {
       }
     }
     
-    
-    
+        
     for (let i = 0; i < this.ReporteFinal.length; i++) {
+      let total1 = "0", total2 = "0", total3 = "0";
+
       if (this.ReporteFinal[i].a != null) {
 
         const avaiDist1 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 1);
-        console.log("avaiDist-->", avaiDist1?.a + " " + avaiDist1?.c + " " + avaiDist1?.d);
-
-        const avaiDist2 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 2);
-        console.log("avaiDist-->", avaiDist2?.a + " " + avaiDist2?.c + " " + avaiDist2?.d);
-          
-        const avaiDist3 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 3);
-        console.log("avaiDist-->", avaiDist3?.a + " " + avaiDist3?.c + " " + avaiDist3?.d);
-
-          
-                   
-          /*this.importedData[i].c = avaiDist?.a;*/
-      }
-    }
-
-    /*
+        if(avaiDist1 != undefined){
+          total1 = avaiDist1?.c;
+        }else{
+          total1 = "0";
+        }
       
-    */
-    //this.ExportaRep(this.ReporteFinal, "");         
+        const avaiDist2 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 2);
+        if(avaiDist2 != undefined){
+          total2 = avaiDist2?.c;
+        }else{
+          total2 = "0";
+        }            
+        const avaiDist3 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 3);
+        if(avaiDist3 != undefined){
+          total3 = avaiDist3?.c;
+        }else{
+          total3 = "0";
+        }
+        
+        let vdeImporteFin = (total1) + (total2) + (total3);
+      
+        this.ReporteFinal[i].c =   total1; 
+        this.ReporteFinal[i].d =   total2; 
+        this.ReporteFinal[i].e =   total3; 
+        this.ReporteFinal[i].f =   String(parseFloat(vdeImporteFin).toFixed(2));
+                           
+      }      
+    }
+    this.ExportaRep(this.ReporteFinal, "");         
   }
 
   private async getTextFromFile(event: any) {
-    console.log(event.target.files[0]);
+    console.log(event.target.files[0].name);
     const file: File = event.target.files[0];
     let fileContent = await file.text();
     return fileContent;
@@ -367,10 +382,16 @@ export class DashboardComponent implements OnInit {
     this.importedEntrada = [];
     this.importedSalida = [];
     this.importedRep = [];
+    this.ReporteFinal = [];
+    this.ReporteMes = [];
+    this.ReporteFinal = [];
     this.viMesSelect = 0;
     this.TotalHB = 0;
     this.selected = "";
     this.tiempo = "";
+    this.vcArchivo1 = "";
+    this.vcArchivo2 = "";
+    this.vcArchivo3 = "";
   }
 }
 

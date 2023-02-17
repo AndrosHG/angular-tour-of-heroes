@@ -19,7 +19,6 @@
             <mat-option value="1ra">PRIMERA</mat-option>
             <mat-option value="2da">SEGUNDA</mat-option>
         </mat-select>
-
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>Mes</mat-label>
@@ -33,9 +32,7 @@
     <mat-label>Periodo: </mat-label>
     <input type="text" readonly class="tvreadonly" [value]="tiempo">
     <button mat-raised-button color="primary" class="btn-Procesa" (click)="probando()">Procesar</button>
-    <button mat-raised-button class="btn-Limpiar" (click)="LimpiarPantalla()">Limpiar</button>
-
-
+    <button mat-raised-button color="warn" class="btn-Limpiar" (click)="LimpiarPantalla()">Limpiar</button>
 </mat-card>
 <p></p>
 <mat-card class="example-card">
@@ -69,17 +66,23 @@
 <p></p>
 
 <mat-card class="example-card">
-
+    <h3 style="color:rgb(255, 254, 254);background-color:rgb(212, 90, 19)">Crear Reporte Trimestral</h3>
     <mat-card-header>
         <input #fileUpload multiple color="warn" [accept]="'.csv'" type="file" (change)="importDataFromCSVByTypeR($event)">
+        <button mat-raised-button color="warn" class="btn-Rep" (click)="CreaReporteFin()">Exportar a Excel</button>
     </mat-card-header>
+
 </mat-card>
-
-
 <mat-card class="example-card">
-
+    Archivos Seleccionados:
+    <p></p> {{vcArchivo1}}
+    <p></p> {{vcArchivo2}}
+    <p></p> {{vcArchivo3}}
+</mat-card>
+<!--
+<mat-card class="example-card">
     <mat-card-header>
-
-        <button mat-raised-button class="btn-Limpiar" (click)="CreaReporteFin()">Reporte Trimestral</button>
+        <button mat-raised-button color="warn" class="btn-Rep" (click)="CreaReporteFin()">Exportar a Excel</button>
     </mat-card-header>
 </mat-card>
+-->

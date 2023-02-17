@@ -77,14 +77,6 @@ mat-form-field {
     width: 40%;
 }
 
-.btn-Procesa {
-    margin-left: 25%;
-}
-
-.btn-Limpiar {
-    margin-left: 10%;
-}
-
 .btn-Salir {
     margin-left: 83%;
 }
@@ -111,4 +103,18 @@ mat-form-field {
     padding-right: 24px;
 }
 
-.mat-typography {}
+
+/*botones*/
+
+.btn-Procesa {
+    background-color: rgb(136, 179, 52);
+}
+
+.btn-Limpiar {
+    background-color: rgb(139, 69, 69);
+}
+
+.btn-Rep {
+    background-color: darkolivegreen;
+    margin-left: 70%;
+}

@@ -59,7 +59,8 @@ export class CsvService {
   }
 
   public importDataFromCSVByType(csvText: string, obj: any): Array<any> {
-    const propertyNames = csvText.slice(0, csvText.indexOf('\n')).split(',');
+    
+    const propertyNames = csvText.slice(0, csvText.indexOf('\n') + 1).split(',');
     const dataRows = csvText.slice(csvText.indexOf('\n') + 1).split('\n');
 
     

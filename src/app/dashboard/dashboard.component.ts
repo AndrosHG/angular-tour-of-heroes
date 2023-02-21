@@ -157,6 +157,7 @@ export class DashboardComponent implements OnInit {
   public async importDataFromCSV(event: any) {
     let fileContent = await this.getTextFromFile(event);
     this.importedData = this._csvService.importDataFromCSV(fileContent);
+    
   }
 
   public async importDataFromCSVByType(event: any) {
@@ -167,6 +168,11 @@ export class DashboardComponent implements OnInit {
       fileContent,
       new Transaction()
     );
+   
+    for(let a =0; a < this.importedData.length; a++){
+      console.log("resultados", this.importedData[a]);
+      
+    }
 
   }
 

@@ -162,18 +162,15 @@ export class DashboardComponent implements OnInit {
 
   public async importDataFromCSVByType(event: any) {
     this.LimpiarPantalla();
+    
+
     let fileContent = "";
     fileContent = await this.getTextFromFile(event);
+    
     this.importedData = this._csvService.importDataFromCSVByType(
       fileContent,
       new Transaction()
     );
-   
-    for(let a =0; a < this.importedData.length; a++){
-      console.log("resultados", this.importedData[a]);
-      
-    }
-
   }
 
   /*Reporte Trimestral*/
@@ -354,7 +351,7 @@ export class DashboardComponent implements OnInit {
     this.importedRep.push(row);
 
     this.dataSource = ELEMENT_DAT;
-    this.ExportaRep(this.importedRep, ""); //importe de salida
+   // this.ExportaRep(this.importedRep, ""); //importe de salida
   }
 
   ExportaRep(json: any[], excelFileName: string): void {

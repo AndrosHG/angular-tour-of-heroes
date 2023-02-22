@@ -59,9 +59,18 @@ export class CsvService {
   }
 
   public importDataFromCSVByType(csvText: string, obj: any): Array<any> {
-    
+    /*console.log("csvText", csvText);*/
+    let resultados = 'a,b,c,d,e,f,g,h,i,j,k,l,m' + '\r' + '\n' + csvText;
+
+    /*bloque_original
     const propertyNames = csvText.slice(0, csvText.indexOf('\n') + 1).split(',');
-    const dataRows = csvText.slice(csvText.indexOf('\n') + 1).split('\n');
+    console.log("property names", propertyNames);*/
+
+    const propertyNames = resultados.slice(0, resultados.indexOf('\n') ).split(',');
+    /*console.log("property namesP", propertyNames);*/
+    
+    const dataRows =  resultados.slice(resultados.indexOf('\n')).split('\n');
+    /*console.log("dataRows", dataRows);*/
 
     
     let dataArray: any[] = [];

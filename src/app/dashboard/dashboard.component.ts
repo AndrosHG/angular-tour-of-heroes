@@ -5,22 +5,13 @@ import { Injectable } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 
-import { LogginserviceService } from 'src/servicios/logginServices/logginservice.service';
 import { DistribuidoraServicesService } from '../../servicios/distribuidoraService/distribuidora-services.service';
-import { MatDialogRef, MatDialog, } from '@angular/material/dialog';
-import { ViewChild } from '@angular/core';
+import { MatDialog, } from '@angular/material/dialog';
 
 
 interface Dist {
   dist: string;
   planta: string;
-}
-
-export interface Tile {
-  color: string;
-  cols: number;
-  rows: number;
-  text: string;
 }
 
 export interface PeriodicElement {
@@ -121,52 +112,30 @@ export class DashboardComponent implements OnInit {
   dist: Dist[] = [
     { planta: '101', dist: 'AEROPLAZA' },
     { planta: '164', dist: 'FR AUTOMOTRIZ' },
-    { planta: '180', dist: 'GRUPO ISMO' },
+    { planta: '180', dist: 'GRUPO ITSMO' },
     { planta: '207', dist: 'CUAUTLA' },
-    { planta: '243', dist: 'CALIDA SANJERA' }
+    { planta: '243', dist: 'CALIDADSANJERA' }
 
   ]
-  public saveDataInCSV(name: string, data: Array<any>): void {
-    let csvContent = this._csvService.saveDataInCSV(data);
-
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,';
-    hiddenElement.target = '_blank';
-    hiddenElement.download = name + '.csv';
-    hiddenElement.click();
-  }
-
-
 
   selectMes(vcMes: String) {
-    for (let i = 0; i < this.periodo.length; i++) {
-      if (this.periodo[i].mes1 == vcMes ||
-        this.periodo[i].mes2 == vcMes ||
-        this.periodo[i].mes3 == vcMes) {
-        this.tiempo = this.periodo[i].periodo;
-      }
+    const vcPeriodo = this.periodo.find(vcmesP => vcmesP.mes1 == vcMes || vcmesP.mes2 == vcMes || vcmesP.mes3 == vcMes);
+    if (vcPeriodo != undefined) {
+      this.tiempo = vcPeriodo?.periodo;
     }
-
-    for (let j = 0; j < this.meses.length; j++) {
-      if (this.meses[j].nombre === vcMes) {
-        this.viMesSelect = this.meses[j].id;
-      }
+    const viMesID = this.meses.find(viMes => viMes.nombre == vcMes);
+    if (viMesID != undefined) {
+      this.viMesSelect = viMesID?.id;
     }
-  }
-
-  public async importDataFromCSV(event: any) {
-    let fileContent = await this.getTextFromFile(event);
-    this.importedData = this._csvService.importDataFromCSV(fileContent);
-    
   }
 
   public async importDataFromCSVByType(event: any) {
     this.LimpiarPantalla();
-    
+
 
     let fileContent = "";
     fileContent = await this.getTextFromFile(event);
-    
+
     this.importedData = this._csvService.importDataFromCSVByType(
       fileContent,
       new Transaction()
@@ -201,13 +170,13 @@ export class DashboardComponent implements OnInit {
     for (let a = 0; a < this.ReporteMes.length; a++) {
       this.ReporteMes[a].d = viFile;
       this.ReporteTrimestral.push(this.ReporteMes[a]);
-      
+
     }
   }
   /*------------------*/
 
   CreaReporteFin() {
-    if(this.ReporteTrimestral.length===0){
+    if (this.ReporteTrimestral.length === 0) {
       return;
     }
 
@@ -224,43 +193,42 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
-    
-        
+
+
     for (let i = 0; i < this.ReporteFinal.length; i++) {
       let total1 = "0", total2 = "0", total3 = "0";
 
       if (this.ReporteFinal[i].a != null) {
 
         const avaiDist1 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 1);
-        if(avaiDist1 != undefined){
+        if (avaiDist1 != undefined) {
           total1 = avaiDist1?.c;
-        }else{
+        } else {
           total1 = "0";
         }
-      
         const avaiDist2 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 2);
-        if(avaiDist2 != undefined){
+        if (avaiDist2 != undefined) {
           total2 = avaiDist2?.c;
-        }else{
+        } else {
           total2 = "0";
-        }            
+        }
         const avaiDist3 = this.ReporteTrimestral.find(cElemento => cElemento.a === this.ReporteFinal[i].a && cElemento.d === 3);
-        if(avaiDist3 != undefined){
+        if (avaiDist3 != undefined) {
           total3 = avaiDist3?.c;
-        }else{
+        } else {
           total3 = "0";
         }
-        
+
         let vdeImporteFin = (total1) + (total2) + (total3);
-      
-        this.ReporteFinal[i].c =   total1; 
-        this.ReporteFinal[i].d =   total2; 
-        this.ReporteFinal[i].e =   total3; 
-        this.ReporteFinal[i].f =   String(parseFloat(vdeImporteFin).toFixed(2));
-                           
-      }      
+
+        this.ReporteFinal[i].c = total1;
+        this.ReporteFinal[i].d = total2;
+        this.ReporteFinal[i].e = total3;
+        this.ReporteFinal[i].f = String(parseFloat(vdeImporteFin).toFixed(2));
+
+      }
     }
-    this.ExportaRep(this.ReporteFinal, "");         
+    this.ExportaRep(this.ReporteFinal, "");
   }
 
   private async getTextFromFile(event: any) {
@@ -270,7 +238,7 @@ export class DashboardComponent implements OnInit {
     return fileContent;
   }
 
-  probando() {
+  Procesar() {
     this.dataSource = [];
     this.importedSalida = [];
     this.importedRep = [];
@@ -351,7 +319,7 @@ export class DashboardComponent implements OnInit {
     this.importedRep.push(row);
 
     this.dataSource = ELEMENT_DAT;
-   // this.ExportaRep(this.importedRep, ""); //importe de salida
+    this.ExportaRep(this.importedRep, "");
   }
 
   ExportaRep(json: any[], excelFileName: string): void {

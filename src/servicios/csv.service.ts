@@ -59,18 +59,13 @@ export class CsvService {
   }
 
   public importDataFromCSVByType(csvText: string, obj: any): Array<any> {
-    /*console.log("csvText", csvText);*/
     let resultados = 'a,b,c,d,e,f,g,h,i,j,k,l,m' + '\r' + '\n' + csvText;
 
-    /*bloque_original
-    const propertyNames = csvText.slice(0, csvText.indexOf('\n') + 1).split(',');
-    console.log("property names", propertyNames);*/
+   
 
     const propertyNames = resultados.slice(0, resultados.indexOf('\n') ).split(',');
-    /*console.log("property namesP", propertyNames);*/
     
     const dataRows =  resultados.slice(resultados.indexOf('\n')).split('\n');
-    /*console.log("dataRows", dataRows);*/
 
     
     let dataArray: any[] = [];
@@ -90,18 +85,7 @@ export class CsvService {
         if (typeof obj[propertyName] === 'undefined') {
           dataObj[propertyName] = value;
         } 
-        else if (typeof obj[propertyName] === 'boolean') {
-          dataObj[propertyName] = value.toLowerCase() === 'true';
-        } 
-        else if (typeof obj[propertyName] === 'number') {
-          dataObj[propertyName] = Number(value);
-        } 
-        else if (typeof obj[propertyName] === 'string') {
-          dataObj[propertyName] = value;
-        }
-        else if (typeof obj[propertyName] === 'object') {
-          console.error("do no have algorithm to convert object");
-        }
+        
       }
 
       dataArray.push(dataObj);

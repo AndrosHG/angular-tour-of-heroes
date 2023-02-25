@@ -9,6 +9,20 @@ import { DistribuidoraServicesService } from '../../servicios/distribuidoraServi
 import { MatDialog, } from '@angular/material/dialog';
 
 
+import {DomSanitizer} from '@angular/platform-browser';
+import {MatIconRegistry} from '@angular/material/icon';
+
+const THUMBUP_ICON =
+  `
+  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.` +
+  `44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5` +
+  `1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-1.91l-.01-.01L23 10z"/>
+  </svg>
+`;
+
+
 interface Dist {
   dist: string;
   planta: string;
@@ -56,8 +70,14 @@ const EXCEL_EXTENSION = '.xlsx';
 export class DashboardComponent implements OnInit {
   constructor(private _csvService: CsvService,
     private _DistService: DistribuidoraServicesService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) { 
 
+      iconRegistry.addSvgIconLiteral('thumbs-up', sanitizer.bypassSecurityTrustHtml(THUMBUP_ICON));
+    }
+
+  
+    
   nota = "Campos Obligatorios";
   selected = "";
   tiempo = "";
@@ -272,7 +292,7 @@ export class DashboardComponent implements OnInit {
           const avai = this.importedRep.find(element => element.a === this.importedData[i].b);
           if (avai != undefined) {
             for (let a = 0; a < this.importedRep.length; a++) {
-              if (this.importedRep[a].b === this.importedData[a].b) {
+              if (this.importedRep[a].dist === this.importedData[a].b) {
                 this.importedRep[a].l = parseFloat(this.importedRep[a].l) + parseFloat(this.importedData[i].l)
               }
             }
@@ -319,7 +339,7 @@ export class DashboardComponent implements OnInit {
     this.importedRep.push(row);
 
     this.dataSource = ELEMENT_DAT;
-    this.ExportaRep(this.importedRep, "");
+    /*this.ExportaRep(this.importedRep, "");*/
   }
 
   ExportaRep(json: any[], excelFileName: string): void {
@@ -330,6 +350,9 @@ export class DashboardComponent implements OnInit {
     };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, excelFileName);
+
+    
+
 
   }
 
@@ -367,3 +390,6 @@ export class DashboardComponent implements OnInit {
 }
 
 
+/*
+Formato excel
+https://learn.microsoft.com/es-es/office/dev/add-ins/excel/excel-add-ins-workbooks*/

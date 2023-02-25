@@ -25,6 +25,7 @@ import { OKTA_CONFIG, OktaAuthModule } from '@okta/okta-angular';
 import { DialogoConfirmacionComponent } from './dialogo-confirmacion/dialogo-confirmacion.component';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
+import {MatIconModule} from '@angular/material/icon';
 
 const oktaConfig = {
   issuer: 'https://{yourOktaDomain}/oauth2/default',
@@ -61,7 +62,7 @@ const oktaConfig = {
     MatDividerModule,
     MatDialogModule,
     HttpClientModule,
-    
+    MatIconModule
     
     
              
